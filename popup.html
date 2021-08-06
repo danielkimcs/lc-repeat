@@ -6,12 +6,24 @@
 </head>
 
 <body>
-  <div class="btn-container">
-    <button class="schedule-btn" value="3">3</button>
-    <button class="schedule-btn" value="7">7</button>
-    <button class="schedule-btn" value="15">15</button>
-    <button class="schedule-btn" value="30">30</button>
+  <div class="form-container">
+
+    Number of days to revisit problem
+    <div class="btn-container">
+      <button class="schedule-btn" value="3">3</button>
+      <button class="schedule-btn" value="7">7</button>
+      <button class="schedule-btn" value="15">15</button>
+      <button class="schedule-btn" value="30">30</button>
+    </div>
+
+    <div class="notes-container">
+      <span>Notes:</span>
+      <textarea id="notes" name="notes" rows="2"></textarea>
+    </div>
   </div>
+
+  <h2 class="save-message hide">Saved!</h2>
+
 
   <script src="scripts/popup.js"></script>
 </body>

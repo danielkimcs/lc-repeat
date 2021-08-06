@@ -6,8 +6,15 @@ const problems = {};
  * number: {
  *  title: "",
  *  difficulty: "",
- *  latestSolvedDate: new Date(),
- *  scheduledDate: new Date()
+ *  link: "",
+ *  current: {
+ *    notes: "",
+ *    solvedDate: new Date(),
+ *    scheduledDate: new Date()
+ *  },
+ *  history: [
+ * {...}, {...}
+ *  ]
  * }
  */
 

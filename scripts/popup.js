@@ -1,4 +1,9 @@
+const notesInput = document.getElementById("notes");
 let scheduleButtons = document.getElementsByClassName("schedule-btn");
+let formContainer = document.getElementsByClassName("form-container")[0];
+let saveMessage = document.getElementsByClassName("save-message")[0];
+
+let problemUrl = undefined;
 let questionNumber = undefined;
 let questionTitle = undefined;
 let questionDifficulty = undefined;
@@ -15,8 +20,8 @@ const loadQuestionInfo = async (callback) => {
         target: { tabId: tab.id },
         function: fetchQuestionInfo,
     }, (res) => {
-        const { num, title, diff } = res[0].result;
-        [questionNumber, questionTitle, questionDifficulty] = [num, title, diff];
+        const { url, num, title, diff } = res[0].result;
+        [problemUrl, questionNumber, questionTitle, questionDifficulty] = [url, num, title, diff];
         callback();
         return;
     });
@@ -31,31 +36,44 @@ Array.prototype.forEach.call(scheduleButtons, button => {
 
 const scheduleCurrentProblem = async (numDays) => {
     loadQuestionInfo(() => {
-        // alert(questionNumber + ": problem - " + questionTitle + "; schedule " + numDays + " days");
+        const userNotes = notesInput.value;
+
         chrome.storage.sync.get("problems", ({ problems }) => {
             let newProblems = { ...problems };
             let newScheduledDate = new Date();
             newScheduledDate.setDate(newScheduledDate.getDate() + numDays);
 
             if (questionNumber in newProblems) {
-                let currentProblem = newProblems[questionNumber];
-                let updatedProblem = {
+                const currentProblem = newProblems[questionNumber];
+                const updatedProblem = {
                     ...currentProblem,
-                    latestSolvedDate: new Date(),
-                    scheduledDate: newScheduledDate
+                    history: currentProblem.history.concat({
+                        ...currentProblem.current
+                    }),
+                    current: {
+                        notes: userNotes,
+                        solvedDate: (new Date()).toJSON(),
+                        scheduledDate: (newScheduledDate).toJSON()
+                    }
                 };
                 newProblems[questionNumber] = updatedProblem;
             } else {
                 newProblems[questionNumber] = {
                     title: questionTitle,
                     difficulty: questionDifficulty,
-                    latestSolvedDate: new Date(),
-                    scheduledDate: newScheduledDate
+                    link: problemUrl,
+                    current: {
+                        notes: userNotes,
+                        solvedDate: (new Date()).toJSON(),
+                        scheduledDate: (newScheduledDate).toJSON()
+                    },
+                    history: []
                 }
             }
 
             chrome.storage.sync.set({ problems: newProblems }, () => {
-                console.log(newProblems);
+                formContainer.classList.add("hide");
+                saveMessage.classList.remove("hide");
             });
         });
     });
@@ -65,5 +83,6 @@ const fetchQuestionInfo = () => {
     let questionHeader = document.querySelectorAll('[data-cy="question-title"]')[0];
     const [num, title] = questionHeader.innerText.split(". ");
     const diff = document.querySelectorAll("[diff]")[0].innerText;
-    return { num, title, diff };
+    const url = window.location.href;
+    return { url, num, title, diff };
 }

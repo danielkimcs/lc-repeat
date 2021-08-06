@@ -1,3 +1,7 @@
+body {
+    font-family: sans-serif;
+}
+
 .btn-container {
     padding: 10px;
     width: 100%;
@@ -18,4 +22,17 @@
 .schedule-btn:hover {
     cursor: pointer;
     font-weight: bold;
+}
+
+.notes-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.save-message {
+    color: green;
+}
+
+.hide {
+    display: none;
 }

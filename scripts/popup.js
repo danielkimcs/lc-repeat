@@ -21,9 +21,9 @@ let isPrevNotesVisible = false;
 const tableHeaders = ['#', 'Problem Title', 'Due Date'];
 
 const difficultyColors = {
-    "Easy": "rgba(0,175,155,0.6)",
-    "Medium": "rgba(255,184,0,0.6)",
-    "Hard": "rgba(255,45,85,0.6)"
+    "Easy": "rgba(0,175,155,0.5)",
+    "Medium": "rgba(255,184,0,0.5)",
+    "Hard": "rgba(255,45,85,0.5)"
 }
 
 const hideElement = (element, hide) => {
@@ -47,7 +47,14 @@ const displayProblemsTable = (problems) => {
             let problemRow = problemsTable.insertRow(index + 1);
             problemRow.insertCell(0).innerHTML = problemNumber;
             problemRow.insertCell(1).innerHTML = problem.title;
-            problemRow.insertCell(2).innerHTML = formatDate(problem.current.scheduledDate) + " (" + getDaysInBetween(new Date().toJSON(), problem.current.scheduledDate) + " days)";
+            let dateCell = problemRow.insertCell(2);
+            dateCell.innerHTML = formatDate(problem.current.scheduledDate);
+
+            if (Date.parse(new Date()) < Date.parse(problem.current.scheduledDate)) {
+                dateCell.innerHTML += " (" + getDaysInBetween(new Date().toJSON(), problem.current.scheduledDate) + " days)";
+            } else {
+                dateCell.classList.add("overdue");
+            }
 
             problemRow.addEventListener('click', () => {
                 chrome.tabs.create({ url: problem.link });

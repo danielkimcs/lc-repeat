@@ -65,6 +65,10 @@ td, th {
     cursor: pointer;
 }
 
+.toggle-prev-notes {
+    width: 150px;
+}
+
 .schedule-btn {
     margin: 5px;
     padding: 3px;
@@ -75,7 +79,7 @@ td, th {
     font-size: 1rem;
 }
 
-.schedule-btn:hover {
+.bold-hover:hover {
     cursor: pointer;
     font-weight: bold;
 }
@@ -96,4 +100,8 @@ textarea {
 
 .hide {
     display: none;
+}
+
+.overdue {
+    background-color: rgba(255, 112, 112, 0.7);
 }

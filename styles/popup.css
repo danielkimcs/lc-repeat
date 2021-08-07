@@ -29,6 +29,11 @@ td, th {
     padding: 8px;
 }
 
+.problems {
+    display: flex;
+    flex-direction: column;
+}
+
 .problem-row:hover {
     cursor: pointer;
     opacity: 0.8;
@@ -47,13 +52,16 @@ td, th {
     width: 20px;
     height: 20px;
     line-height: 20px;
+    font-size: 1.1rem;
+}
+
+.toggle {
     outline: none;
     border: 0;
-    font-size: 1.1rem;
     margin-bottom: 5px;
 }
 
-.table-toggle:hover {
+.toggle:hover {
     cursor: pointer;
 }
 
@@ -75,6 +83,11 @@ td, th {
 .notes-container {
     display: flex;
     flex-direction: column;
+}
+
+textarea {
+    resize: vertical;
+    margin-bottom: 10px;
 }
 
 .save-message {

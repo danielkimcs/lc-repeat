@@ -6,10 +6,18 @@
 </head>
 
 <body>
-  <button class="table-toggle"></button>
-  <div class="problems-container">
-    <table>
-    </table>
+  <div class="problems">
+    <button class="toggle table-toggle"></button>
+    <div class="problems-container">
+      <table>
+      </table>
+    </div>
+  </div>
+
+  <button class="toggle toggle-prev-notes"></button>
+  <div class="notes-container previous-notes-container hide">
+    <span>Previous notes:</span>
+    <textarea id="prevNotes" name="prevNotes" rows="6" disabled></textarea>
   </div>
 
   <div class="form-container">
@@ -22,7 +30,7 @@
     </div>
 
     <div class="notes-container">
-      <span>Notes:</span>
+      <span>Enter new notes:</span>
       <textarea id="notes" name="notes" rows="2"></textarea>
     </div>
   </div>

@@ -6,6 +6,8 @@ let tableToggleBtn = document.querySelector(".table-toggle");
 let formContainer = document.querySelector(".form-container");
 let saveMessage = document.querySelector(".save-message");
 let tableContainer = document.querySelector(".problems-container");
+let togglePrevNotes = document.querySelector(".toggle-prev-notes");
+let prevNotesContainer = document.querySelector(".previous-notes-container");
 let problemsTable = document.querySelector(".problems-container table");
 
 let problemUrl = undefined;
@@ -14,6 +16,7 @@ let questionTitle = undefined;
 let questionDifficulty = undefined;
 
 let isTableVisible = true;
+let isPrevNotesVisible = false;
 
 const tableHeaders = ['#', 'Problem Title', 'Due Date'];
 
@@ -114,6 +117,8 @@ const scheduleCurrentProblem = async (numDays) => {
             chrome.storage.sync.set({ problems: newProblems }, () => {
                 hideElement(formContainer, true);
                 hideElement(saveMessage, false);
+                hideElement(togglePrevNotes, true);
+                hideElement(prevNotesContainer, true);
                 displayProblemsTable(newProblems);
             });
         });
@@ -137,13 +142,38 @@ const addScheduleBtnListeners = () => {
     });
 }
 
+const addTogglePrevNotesListener = () => {
+    chrome.storage.sync.get("problems", ({ problems }) => {
+        loadQuestionInfo(() => {
+            if (problems[questionNumber] && problems[questionNumber].current.notes) {
+                let notesTextArea = document.getElementById("prevNotes");
+                notesTextArea.innerText = problems[questionNumber].current.notes;
+                togglePrevNotes.addEventListener("click", () => {
+                    isPrevNotesVisible = !isPrevNotesVisible;
+                    hideElement(prevNotesContainer, !isPrevNotesVisible);
+                    if (isPrevNotesVisible) {
+                        togglePrevNotes.innerHTML = "Hide previous notes";
+                    } else {
+                        togglePrevNotes.innerHTML = "Show previous notes";
+                    }
+                });
+            } else {
+                hideElement(togglePrevNotes, true);
+            }
+        });
+    });
+}
+
 chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
     if (tab.url.includes("leetcode.com/problems/")) {
         addScheduleBtnListeners();
         tableToggleBtn.innerHTML = "+";
         isTableVisible = false;
         hideElement(tableContainer, !isTableVisible);
+        addTogglePrevNotesListener();
+        togglePrevNotes.innerHTML = "Show previous notes";
     } else {
+        hideElement(togglePrevNotes, true);
         hideElement(formContainer, true);
         hideElement(tableToggleBtn, true);
     }

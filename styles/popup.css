@@ -2,11 +2,59 @@ body {
     font-family: sans-serif;
 }
 
+.problems-container table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-bottom: 10px;
+    display: block;
+    height: 200px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+td:first-child, th:first-child {
+    width: 33px;
+}
+
+th {
+    font-weight: bold;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 8px;
+}
+
+.problem-row:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
 .btn-container {
     padding: 10px;
-    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
     display: flex;
     flex-direction: row;
+    justify-content: center;
+}
+
+.table-toggle {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    outline: none;
+    border: 0;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.table-toggle:hover {
+    cursor: pointer;
 }
 
 .schedule-btn {

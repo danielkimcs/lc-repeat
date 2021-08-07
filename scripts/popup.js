@@ -1,3 +1,5 @@
+import { formatDate, getDaysInBetween } from "../utility/helpers.js";
+
 const notesInput = document.getElementById("notes");
 let scheduleButtons = document.getElementsByClassName("schedule-btn");
 let tableToggleBtn = document.querySelector(".table-toggle");
@@ -26,11 +28,6 @@ const hideElement = (element, hide) => {
     else element.classList.remove("hide");
 }
 
-const formatDate = (dateString) => {
-    let date = new Date(dateString);
-    return ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear();
-}
-
 const displayProblemsTable = (problems) => {
     problemsTable.innerHTML = "";
     let header = problemsTable.insertRow(0);
@@ -47,7 +44,7 @@ const displayProblemsTable = (problems) => {
             let problemRow = problemsTable.insertRow(index + 1);
             problemRow.insertCell(0).innerHTML = problemNumber;
             problemRow.insertCell(1).innerHTML = problem.title;
-            problemRow.insertCell(2).innerHTML = formatDate(problem.current.scheduledDate);
+            problemRow.insertCell(2).innerHTML = formatDate(problem.current.scheduledDate) + " (" + getDaysInBetween(new Date().toJSON(), problem.current.scheduledDate) + " days)";
 
             problemRow.addEventListener('click', () => {
                 chrome.tabs.create({ url: problem.link });

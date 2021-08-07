@@ -7,12 +7,16 @@
 
 <body>
   <div class="problems">
-    <button class="toggle table-toggle"></button>
+    <div class="top-btns">
+      <button class="toggle table-toggle"></button>
+      <!-- <button class="more-btn bold-hover toggle">More</button> -->
+    </div>
     <div class="problems-container">
       <table>
       </table>
     </div>
   </div>
+
 
   <button class="toggle toggle-prev-notes bold-hover"></button>
   <div class="notes-container previous-notes-container hide">
@@ -33,6 +37,8 @@
       <span>Enter new notes:</span>
       <textarea id="notes" name="notes" rows="2"></textarea>
     </div>
+
+    <button class="bold-hover toggle stop-btn">Stop repeating</button>
   </div>
 
   <h2 class="save-message hide">Saved!</h2>

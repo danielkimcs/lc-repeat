@@ -41,6 +41,7 @@ const displayProblemsTable = (problems) => {
     });
 
     Object.keys(problems)
+        .filter(problemNumber => problems[problemNumber].current !== null)
         .sort((p1, p2) => Date.parse(problems[p1].current.scheduledDate) - Date.parse(problems[p2].current.scheduledDate))
         .forEach((problemNumber, index) => {
             let problem = problems[problemNumber];
@@ -91,23 +92,31 @@ const scheduleCurrentProblem = async (numDays) => {
         chrome.storage.sync.get("problems", ({ problems }) => {
             let newProblems = { ...problems };
             let newScheduledDate = new Date();
-            newScheduledDate.setDate(newScheduledDate.getDate() + numDays);
 
             if (questionNumber in newProblems) {
                 const currentProblem = newProblems[questionNumber];
+
+                let newCurrent = null;
+                if (numDays) {
+                    newScheduledDate.setDate(newScheduledDate.getDate() + numDays);
+                    newCurrent = {
+                        notes: userNotes,
+                        solvedDate: (new Date()).toJSON(),
+                        scheduledDate: (newScheduledDate).toJSON()
+                    };
+                }
+
                 const updatedProblem = {
                     ...currentProblem,
                     history: currentProblem.history.concat({
                         ...currentProblem.current
                     }),
-                    current: {
-                        notes: userNotes,
-                        solvedDate: (new Date()).toJSON(),
-                        scheduledDate: (newScheduledDate).toJSON()
-                    }
+                    current: newCurrent
                 };
                 newProblems[questionNumber] = updatedProblem;
             } else {
+                newScheduledDate.setDate(newScheduledDate.getDate() + numDays);
+
                 newProblems[questionNumber] = {
                     title: questionTitle,
                     difficulty: questionDifficulty,
@@ -120,6 +129,7 @@ const scheduleCurrentProblem = async (numDays) => {
                     history: []
                 }
             }
+
 
             chrome.storage.sync.set({ problems: newProblems }, () => {
                 hideElement(formContainer, true);
@@ -140,19 +150,27 @@ const fetchQuestionInfo = () => {
     return { url, num, title, diff };
 }
 
+const scheduleClick = (button) => {
+    return async () => {
+        const numDays = parseInt(button.value);
+        scheduleCurrentProblem(numDays);
+    };
+}
+
 const addScheduleBtnListeners = () => {
     Array.prototype.forEach.call(scheduleButtons, button => {
-        button.addEventListener("click", async () => {
-            const numDays = parseInt(button.value);
-            scheduleCurrentProblem(numDays);
-        });
+        button.addEventListener("click", scheduleClick(button));
     });
+    let stopBtn = document.querySelector('.stop-btn');
+    stopBtn.addEventListener("click", scheduleClick(stopBtn));
 }
 
 const addTogglePrevNotesListener = () => {
     chrome.storage.sync.get("problems", ({ problems }) => {
         loadQuestionInfo(() => {
-            if (problems[questionNumber] && problems[questionNumber].current.notes) {
+            if (problems[questionNumber] 
+                && problems[questionNumber].current
+                && problems[questionNumber].current.notes) {
                 let notesTextArea = document.getElementById("prevNotes");
                 notesTextArea.innerText = problems[questionNumber].current.notes;
                 togglePrevNotes.addEventListener("click", () => {
@@ -198,4 +216,8 @@ tableToggleBtn.addEventListener("click", () => {
     } else {
         tableToggleBtn.innerHTML = "+";
     }
+});
+
+document.querySelector(".more-btn").addEventListener("click", () => {
+    chrome.tabs.create({ url: "/info.html" });
 });

@@ -6,5 +6,9 @@ export const formatDate = (dateString) => {
 export const getDaysInBetween = (dateStr1, dateStr2) => {
     const firstDate = new Date(dateStr1);
     const secondDate = new Date(dateStr2);
+    const isSameMonthAndYear = firstDate.getMonth() === secondDate.getMonth() && firstDate.getFullYear() === secondDate.getFullYear();
+    if (isSameMonthAndYear) {
+        return Math.abs(firstDate.getDate() - secondDate.getDate());
+    }
     return Math.round(Math.abs((firstDate - secondDate) / (24 * 60 * 60 * 1000)));
 }

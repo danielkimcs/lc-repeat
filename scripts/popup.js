@@ -89,7 +89,7 @@ const scheduleCurrentProblem = async (numDays) => {
     loadQuestionInfo(() => {
         const userNotes = notesInput.value;
 
-        chrome.storage.sync.get("problems", ({ problems }) => {
+        chrome.storage.local.get("problems", ({ problems }) => {
             let newProblems = { ...problems };
             let newScheduledDate = new Date();
 
@@ -108,9 +108,10 @@ const scheduleCurrentProblem = async (numDays) => {
 
                 const updatedProblem = {
                     ...currentProblem,
-                    history: currentProblem.history.concat({
-                        ...currentProblem.current
-                    }),
+                    // history: currentProblem.history.concat({
+                    //     ...currentProblem.current
+                    // }),
+                    history: [{...currentProblem.current}],
                     current: newCurrent
                 };
                 newProblems[questionNumber] = updatedProblem;
@@ -131,7 +132,7 @@ const scheduleCurrentProblem = async (numDays) => {
             }
 
 
-            chrome.storage.sync.set({ problems: newProblems }, () => {
+            chrome.storage.local.set({ problems: newProblems }, () => {
                 hideElement(formContainer, true);
                 hideElement(saveMessage, false);
                 hideElement(togglePrevNotes, true);
@@ -166,7 +167,7 @@ const addScheduleBtnListeners = () => {
 }
 
 const addTogglePrevNotesListener = () => {
-    chrome.storage.sync.get("problems", ({ problems }) => {
+    chrome.storage.local.get("problems", ({ problems }) => {
         loadQuestionInfo(() => {
             if (problems[questionNumber] 
                 && problems[questionNumber].current
@@ -204,7 +205,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
     }
 });
 
-chrome.storage.sync.get("problems", ({ problems }) => {
+chrome.storage.local.get("problems", ({ problems }) => {
     displayProblemsTable(problems);
 });
 

@@ -19,5 +19,5 @@ const problems = {};
  */
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.set({ problems });
+  chrome.storage.local.set({ problems });
 });

@@ -191,7 +191,7 @@ const addTogglePrevNotesListener = () => {
 }
 
 chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
-    if (/^.*leetcode\.com\/problems\/[a-z\-]*\/$/.test(tab.url)) {
+    if (/^.*leetcode\.com\/problems\/[^/]*\/$/.test(tab.url)) {
         addScheduleBtnListeners();
         tableToggleBtn.innerHTML = "+";
         isTableVisible = false;
